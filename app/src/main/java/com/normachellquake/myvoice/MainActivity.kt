@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var ivItemImage: ImageView
     private lateinit var tvItemText: TextView
-    private lateinit var btnAddImage: Button
+    private lateinit var btnEditAddItem: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,22 +24,19 @@ class MainActivity : AppCompatActivity() {
 
         ivItemImage = findViewById(R.id.ivItemImage)
         tvItemText = findViewById(R.id.tvItemText)
-        btnAddImage = findViewById(R.id.btnAddImage)
+        btnEditAddItem = findViewById(R.id.btnEditAddItem)
 
-        val getAction = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-            val uri = it?.data?.data
-            ivItemImage.setImageURI(uri)
-            tvItemText.text = "New Pic"
-        }
-
-        btnAddImage.setOnClickListener{
+        btnEditAddItem.setOnClickListener {
             requestPermissions()
-            val intent = Intent(Intent.ACTION_GET_CONTENT).also {
-                it.type = "image/*"
+            Intent(this, EditOrAddItemActivity::class.java).also{
+                startActivity(it)
             }
-
-            getAction.launch(intent)
         }
+
+//        val item = intent.getSerializableExtra("EXTRA_ITEM") as Item
+        val name = intent.getStringExtra("EXTRA_NAME")
+        tvItemText.text = name
+
     }
 
     private fun hasWriteExternalStoragePermission() =
